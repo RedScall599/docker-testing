@@ -17,21 +17,13 @@ export function formatCurrency(amount) {
 
 // Format date
 export function formatDate(date) {
-  if (!date) return 'N/A'
+  if (!date) return 'Invalid Date'
   try {
-    return new Intl.DateFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }).format(new Date(date))
-  } catch (error) {
-    // Fallback if Intl is not available
     const d = new Date(date)
-    return d.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    })
+    return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`
+  } catch (error) {
+    // Fallback if Date parsing fails
+    return 'Invalid date'
   }
 }
 

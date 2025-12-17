@@ -16,11 +16,32 @@ const navigation = [
 
 export default async function DashboardLayout({ children }) {
   // TODO: Get session user and redirect if not authenticated
+  const user = await getSessionUser();
+  if (!user) redirect('/login');
+
   // TODO: Render navigation layout with user info and logout button
-  
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* TODO: Implement navigation header */}
+      <header className="bg-white shadow">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+          <nav className="flex gap-6">
+            {navigation.map((item) => (
+              <Link key={item.name} href={item.href} className="flex items-center gap-2 text-gray-700 hover:text-blue-600">
+                <item.icon className="h-5 w-5" />
+                <span>{item.name}</span>
+              </Link>
+            ))}
+          </nav>
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-gray-600">{user?.email}</span>
+            <form action="/api/auth/logout" method="POST">
+              <button type="submit" className="bg-red-500 text-white px-3 py-1 rounded">Logout</button>
+            </form>
+          </div>
+        </div>
+      </header>
       {/* TODO: Implement main content area */}
       <main className="py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

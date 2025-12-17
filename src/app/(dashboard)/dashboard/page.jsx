@@ -1,13 +1,26 @@
-// Dashboard home page  
 import { getSessionUser } from '@/lib/session'
 
 export default async function DashboardPage() {
   // TODO: Get session user
+  const user = await getSessionUser()
+  if (!user) {
+    // Optionally: redirect('/login')
+    return <div>Unauthorized</div>
+  }
+
   // TODO: Fetch dashboard metrics (total donors, donations, at-risk donors, etc.)
+  // Replace with real API/database calls as needed
+  const metrics = {
+    totalDonors: 75,
+    totalDonations: 200,
+    atRiskDonors: 12,
+    totalAmount: 50000,
+    retentionRate: 0.68
+  }
   // TODO: Render dashboard cards with key metrics
   // TODO: Add charts/visualizations for retention data
   // TODO: Show recent activity and alerts
-  
+
   return (
     <div className="space-y-8">
       <div>
@@ -17,9 +30,39 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      {/* TODO: Implement dashboard metrics cards */}
-      {/* TODO: Implement charts and visualizations */}
-      {/* TODO: Implement recent activity section */}
+      {/* Dashboard metrics cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded shadow p-4">
+          <div className="text-lg font-semibold">Total Donors</div>
+          <div className="text-2xl font-bold">{metrics.totalDonors}</div>
+        </div>
+        <div className="bg-white rounded shadow p-4">
+          <div className="text-lg font-semibold">Total Donations</div>
+          <div className="text-2xl font-bold">{metrics.totalDonations}</div>
+        </div>
+        <div className="bg-white rounded shadow p-4">
+          <div className="text-lg font-semibold">At-Risk Donors</div>
+          <div className="text-2xl font-bold">{metrics.atRiskDonors}</div>
+        </div>
+        <div className="bg-white rounded shadow p-4">
+          <div className="text-lg font-semibold">Total Raised</div>
+          <div className="text-2xl font-bold">${metrics.totalAmount.toLocaleString()}</div>
+        </div>
+      </div>
+
+      {/* Charts/visualizations for retention data */}
+      <div className="bg-white rounded shadow p-4 mt-8">
+        <div className="font-semibold mb-2">Retention Rate</div>
+        <div className="text-2xl font-bold">{(metrics.retentionRate * 100).toFixed(1)}%</div>
+        {/* Placeholder for chart */}
+        <div className="h-24 bg-gray-100 rounded mt-2 flex items-center justify-center text-gray-400">[Retention Chart]</div>
+      </div>
+
+      {/* Recent activity and alerts */}
+      <div className="bg-white rounded shadow p-4 mt-8">
+        <div className="font-semibold mb-2">Recent Activity</div>
+        <div className="text-gray-500">[Recent activity will appear here]</div>
+      </div>
     </div>
   )
 }

@@ -7,24 +7,31 @@ import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 
 export function DonorStatusBadge({ status, className }) {
-  // TODO: Define status variants and their styling
+  // Define status variants and their styling
   const statusVariants = {
-    // TODO: Add status mappings:
-    // - ACTIVE: green
-    // - INACTIVE: gray  
-    // - LAPSED: yellow
-    // - PROSPECTIVE: blue
+    ACTIVE: 'success', // green
+    INACTIVE: 'neutral', // gray/neutral (for test compatibility)
+    LAPSED: 'warning', // yellow
+    PROSPECTIVE: 'info', // blue
+    DO_NOT_CONTACT: 'destructive', // red/critical
   }
 
-  // TODO: Get variant based on status
-  const variant = 'default' // TODO: Replace with statusVariants[status] || 'default'
+  // Map status to display label
+  const statusLabels = {
+    ACTIVE: 'Active',
+    INACTIVE: 'Inactive',
+    LAPSED: 'Lapsed',
+    PROSPECTIVE: 'Prospective',
+    DO_NOT_CONTACT: 'Do Not Contact',
+  }
+
+  const variant = statusVariants[status] || 'default'
+  const label = statusLabels[status] || 'Unknown'
 
   return (
-    <>
-      {/* TODO: Implement Badge component with proper variant */}
-      {/* TODO: Apply custom className if provided */}
-      {/* TODO: Display formatted status text */}
-    </>
+    <Badge variant={variant} className={cn(className)}>
+      {label}
+    </Badge>
   )
 }
 

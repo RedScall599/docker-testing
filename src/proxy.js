@@ -9,12 +9,45 @@ const protectedRoutes = ['/dashboard', '/donors', '/campaigns', '/donations', '/
 const authRoutes = ['/login', '/register']
 
 export async function proxy(request) {
-  // TODO: Get session token from cookies
-  // TODO: Check if current path requires authentication
-  // TODO: Validate session by calling session API
-  // TODO: Redirect unauthenticated users to login
-  // TODO: Redirect authenticated users away from auth pages
-  // TODO: Preserve intended destination after login
+  // Get session token from cookies
+  const sessionToken = request.cookies.get('session')?.value
+  const { pathname } = request.nextUrl
+
+  // Check if current path requires authentication
+  const isProtected = protectedRoutes.some((route) => pathname.startsWith(route))
+  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route))
+
+  // Validate session by calling session API
+  let isAuthenticated = false
+  if (sessionToken) {
+    try {
+      const res = await fetch(`${request.nextUrl.origin}/api/auth/session`, {
+        headers: { Cookie: `session=${sessionToken}` },
+        cache: 'no-store'
+      })
+      if (res.ok) {
+        const data = await res.json()
+        isAuthenticated = !!data?.user
+      }
+    } catch (e) {
+      isAuthenticated = false
+    }
+  }
+
+  // Redirect unauthenticated users to login
+  if (isProtected && !isAuthenticated) {
+    const loginUrl = new URL('/login', request.nextUrl.origin)
+    loginUrl.searchParams.set('next', pathname)
+    return NextResponse.redirect(loginUrl)
+  }
+
+  // Redirect authenticated users away from auth pages
+  if (isAuthRoute && isAuthenticated) {
+    return NextResponse.redirect(new URL('/dashboard', request.nextUrl.origin))
+  }
+
+  // Allow request to proceed
+  return NextResponse.next()
 }
 
 export const config = {

@@ -10,23 +10,26 @@ export function CampaignStatusBadge({ status, className }) {
   // TODO: Define status variants and their styling
   const statusVariants = {
     // TODO: Add status mappings:
-    // - draft: gray
-    // - active: green
-    // - paused: yellow
-    // - completed: blue
-    // - cancelled: red
-  }
+    draft: 'secondary', // gray
+    active: 'success', // green
+    paused: 'warning', // yellow
+    completed: 'info', // blue
+    cancelled: 'destructive', // red
+  };
 
   // TODO: Get variant based on status
-  const variant = 'default' // TODO: Replace with statusVariants[status] || 'default'
+  const variant = statusVariants[status] || 'default'; // TODO: Replace with statusVariants[status] || 'default'
 
   return (
     <>
       {/* TODO: Implement Badge component with proper variant */}
+      <Badge variant={variant} className={cn(className)}>
+        {/* TODO: Display formatted status text */}
+        {status ? status.charAt(0).toUpperCase() + status.slice(1) : ''}
+      </Badge>
       {/* TODO: Apply custom className if provided */}
-      {/* TODO: Display formatted status text */}
     </>
-  )
+  );
 }
 
 // TODO: Example usage:

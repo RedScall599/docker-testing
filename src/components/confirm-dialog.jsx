@@ -16,18 +16,45 @@ export function ConfirmDialog({
   cancelText = "Cancel",
   variant = "destructive" 
 }) {
-  // TODO: Implement dialog state management
-  // TODO: Handle confirm action with proper callback
-  // TODO: Style confirm button based on variant prop
-  // TODO: Add loading state during confirmation
-  
+  // ...existing code...
+  // Dialog state management (loading)
+  const [loading, setLoading] = useState(false)
+
+  // Confirm action handler
+  const handleConfirm = async () => {
+    setLoading(true)
+    try {
+      await onConfirm()
+      onClose()
+    } catch (err) {
+      // Optionally handle error
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Handle dialog close (escape, backdrop)
+  const handleClose = () => {
+    if (!loading) onClose()
+  }
+
   return (
-    <>
-      {/* TODO: Implement Dialog component */}
-      {/* TODO: Add DialogHeader with title and description */}
-      {/* TODO: Add DialogFooter with cancel and confirm buttons */}
-      {/* TODO: Handle escape key and backdrop click to close */}
-    </>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent onEscapeKeyDown={handleClose} onPointerDownOutside={handleClose}>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          {description && <DialogDescription>{description}</DialogDescription>}
+        </DialogHeader>
+        <DialogFooter>
+          <Button type="button" variant="secondary" onClick={handleClose} disabled={loading}>
+            {cancelText}
+          </Button>
+          <Button type="button" variant={variant} onClick={handleConfirm} disabled={loading}>
+            {loading ? 'Please wait...' : confirmText}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 
