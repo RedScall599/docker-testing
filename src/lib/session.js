@@ -13,13 +13,18 @@ export async function createSession(userId) {
   const token = `${randomUUID()}${randomUUID()}`
   const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7) // 7 days
   // Store session in database with expiration
-  await prisma.session.create({
-    data: {
-      token,
-      userId,
-      expiresAt
-    }
-  })
+  try {
+    await prisma.session.create({
+      data: {
+        token,
+        userId,
+        expiresAt
+      }
+    })
+  } catch (err) {
+    console.error('Failed to create session:', err)
+    throw err
+  }
   // Set HTTP-only cookie (for API routes, must be set in route handler)
   // (No-op here, as cookies().set() is not allowed in API routes)
   return token
@@ -34,14 +39,24 @@ export async function getSession(sessionToken) {
   // Validate session token format
   if (!sessionToken || typeof sessionToken !== 'string') return null
   // Query database for session and user
-  const session = await prisma.session.findUnique({
-    where: { token: sessionToken },
-    include: { user: { include: { organization: true } } }
-  })
+  let session
+  try {
+    session = await prisma.session.findUnique({
+      where: { token: sessionToken },
+      include: { user: { include: { organization: true } } }
+    })
+  } catch (err) {
+    console.error('Failed to load session:', err)
+    return null
+  }
   if (!session) return null
   // Check if session is expired
   if (session.expiresAt < new Date()) {
-    await prisma.session.delete({ where: { token: sessionToken } })
+    try {
+      await prisma.session.delete({ where: { token: sessionToken } })
+    } catch (err) {
+      console.error('Failed to delete expired session:', err)
+    }
     return null
   }
   // Return session with user data

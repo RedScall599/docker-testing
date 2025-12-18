@@ -1,6 +1,7 @@
 // Campaigns API - List and Create
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/session'
+import { ensureDefaultCampaignsForOrg, listCampaigns } from '@/lib/api/campaigns'
 
 export async function GET(request) {
   try {
@@ -18,19 +19,21 @@ export async function GET(request) {
     const skip = (page - 1) * pageSize
     const take = pageSize
 
-    // TODO: Query campaigns for organization
-    const { prisma } = await import('@/lib/db')
-    const [campaigns, total] = await Promise.all([
-      prisma.campaign.findMany({
-        where: { organizationId: session.user.organizationId },
+    // Query campaigns for organization; if empty, auto-seed defaults for this org
+    let { campaigns, total } = await listCampaigns({
+      organizationId: session.user.organizationId,
+      skip,
+      take
+    })
+    if (total === 0) {
+      await ensureDefaultCampaignsForOrg(session.user.organizationId)
+      ;({ campaigns, total } = await listCampaigns({
+        organizationId: session.user.organizationId,
         skip,
-        take,
-        orderBy: { createdAt: 'desc' }
-      }),
-      prisma.campaign.count({ where: { organizationId: session.user.organizationId } })
-    ])
+        take
+      }))
+    }
 
-    // TODO: Return campaigns list
     return NextResponse.json({ campaigns, total, page, pageSize })
   } catch (error) {
     // TODO: Handle errors

@@ -11,6 +11,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -39,9 +40,10 @@ export default function LoginPage() {
       if (!res.ok) {
         setError(data.error || 'Login failed.')
       } else {
-        // Redirect to dashboard or intended destination
+        // Show success confirmation then redirect
+        setSuccess('Successful login')
         const next = searchParams.get('next') || '/dashboard'
-        router.push(next)
+        setTimeout(() => router.push(next), 800)
       }
     } catch (err) {
       setError('Login failed. Please try again.')
@@ -63,6 +65,9 @@ export default function LoginPage() {
         {/* TODO: Add error display */}
         {error && (
           <div className="mb-4 text-red-600 text-sm">{error}</div>
+        )}
+        {success && (
+          <div className="mb-4 text-green-600 text-sm" aria-live="polite">{success}</div>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* TODO: Add email input field */}

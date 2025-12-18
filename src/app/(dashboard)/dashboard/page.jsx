@@ -1,4 +1,5 @@
 import { getSessionUser } from '@/lib/session'
+import RetentionChart from '@/components/charts/retention-chart'
 
 export default async function DashboardPage() {
   // TODO: Get session user
@@ -15,7 +16,9 @@ export default async function DashboardPage() {
     totalDonations: 200,
     atRiskDonors: 12,
     totalAmount: 50000,
-    retentionRate: 0.68
+    retentionRate: 0.68,
+    retentionHistory: [0.55, 0.58, 0.61, 0.6, 0.63, 0.65, 0.66, 0.64, 0.67, 0.68, 0.69, 0.68],
+    retentionLabels: getLast12MonthLabels()
   }
   // TODO: Render dashboard cards with key metrics
   // TODO: Add charts/visualizations for retention data
@@ -52,11 +55,15 @@ export default async function DashboardPage() {
 
       {/* Charts/visualizations for retention data */}
       <div className="bg-white rounded shadow p-4 mt-8">
-        <div className="font-semibold mb-2">Retention Rate</div>
-        <div className="text-2xl font-bold">{(metrics.retentionRate * 100).toFixed(1)}%</div>
-        {/* Placeholder for chart */}
-        <div className="h-24 bg-gray-100 rounded mt-2 flex items-center justify-center text-gray-400">[Retention Chart]</div>
+        <div className="flex items-end justify-between mb-1">
+          <div className="font-semibold">Retention Rate</div>
+          <div className="text-2xl font-bold">{(metrics.retentionRate * 100).toFixed(1)}%</div>
+        </div>
+        <p className="text-sm text-gray-500 mb-2">Monthly donor retention over the last 12 months</p>
+        <RetentionChart data={metrics.retentionHistory} labels={metrics.retentionLabels} seriesLabel="Monthly retention rate" />
       </div>
+
+      
 
       {/* Recent activity and alerts */}
       <div className="bg-white rounded shadow p-4 mt-8">
@@ -65,4 +72,16 @@ export default async function DashboardPage() {
       </div>
     </div>
   )
+}
+
+// Helpers
+function getLast12MonthLabels() {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  const now = new Date()
+  const out = []
+  for (let i = 11; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
+    out.push(months[d.getMonth()])
+  }
+  return out
 }

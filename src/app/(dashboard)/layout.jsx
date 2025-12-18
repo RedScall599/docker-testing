@@ -4,12 +4,10 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Home, Users, Gift, TrendingUp, CheckSquare, FolderTree, Workflow } from 'lucide-react'
 
-const navigation = [
+const baseNavigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
-  { name: 'Donors', href: '/donors', icon: Users },
   { name: 'Donations', href: '/donations', icon: Gift },
   { name: 'Campaigns', href: '/campaigns', icon: TrendingUp },
-  { name: 'Segments', href: '/segments', icon: FolderTree },
   { name: 'Workflows', href: '/workflows', icon: Workflow },
   { name: 'Tasks', href: '/tasks', icon: CheckSquare },
 ]
@@ -19,7 +17,10 @@ export default async function DashboardLayout({ children }) {
   const user = await getSessionUser();
   if (!user) redirect('/login');
 
-  // TODO: Render navigation layout with user info and logout button
+  // Build nav; show Donors link only to ADMINs
+  const navigation = user?.role === 'ADMIN'
+    ? [{ name: 'Donors', href: '/donors', icon: Users }, { name: 'Segments', href: '/segments', icon: FolderTree }, ...baseNavigation]
+    : baseNavigation
 
   return (
     <div className="min-h-screen bg-gray-50">
