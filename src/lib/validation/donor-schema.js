@@ -1,18 +1,18 @@
 // Zod validation schemas for donor operations
 import { z } from 'zod'
 
-// DonorStatusEnum - ACTIVE, LAPSED, PENDING, INACTIVE
-export const DonorStatusEnum = z.enum(['ACTIVE', 'LAPSED', 'PENDING', 'INACTIVE'])
+// DonorStatusEnum - must match Prisma enum: ACTIVE, LAPSED, INACTIVE, DO_NOT_CONTACT
+export const DonorStatusEnum = z.enum(['ACTIVE', 'LAPSED', 'INACTIVE', 'DO_NOT_CONTACT'])
 
-// RetentionRiskEnum - LOW, MEDIUM, HIGH, CRITICAL
-export const RetentionRiskEnum = z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'])
+// RetentionRiskEnum - must match Prisma enum: UNKNOWN, LOW, MEDIUM, HIGH, CRITICAL
+export const RetentionRiskEnum = z.enum(['UNKNOWN', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL'])
 
 
 // createDonorSchema
 export const createDonorSchema = z.object({
 	firstName: z.string().max(50, 'First name must be at most 50 characters'),
 	lastName: z.string().max(50, 'Last name must be at most 50 characters'),
-	email: z.string().email('Invalid email address'),
+	email: z.string().email('Invalid email address').optional(),
 	phone: z.string().max(20).optional(),
 	address: z.object({
 		street: z.string().max(100).optional(),

@@ -29,14 +29,14 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
       lastName: '',
       email: '',
       phone: '',
-      address: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      donorStatus: 'active',
-      retentionRisk: 'low',
-      preferredContactMethod: 'email',
-      tags: '',
+      address: {
+        street: '',
+        city: '',
+        state: '',
+        zip: '',
+      },
+      status: 'ACTIVE',
+      retentionRisk: 'LOW',
       notes: '',
     },
   });
@@ -93,53 +93,54 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
           <FormMessage>{errors.phone?.message}</FormMessage>
         </FormItem>
       </FormField>
-      <FormField name="address" control={register('address')}>
+      <FormField name="address.street" control={register('address.street')}>
         <FormItem>
-          <FormLabel>Address</FormLabel>
+          <FormLabel>Street Address</FormLabel>
           <FormControl>
-            <Input {...register('address')} />
+            <Input {...register('address.street')} />
           </FormControl>
-          <FormMessage>{errors.address?.message}</FormMessage>
+          <FormMessage>{errors.address?.street?.message}</FormMessage>
         </FormItem>
       </FormField>
-      <FormField name="city" control={register('city')}>
+      <FormField name="address.city" control={register('address.city')}>
         <FormItem>
           <FormLabel>City</FormLabel>
           <FormControl>
-            <Input {...register('city')} />
+            <Input {...register('address.city')} />
           </FormControl>
-          <FormMessage>{errors.city?.message}</FormMessage>
+          <FormMessage>{errors.address?.city?.message}</FormMessage>
         </FormItem>
       </FormField>
-      <FormField name="state" control={register('state')}>
+      <FormField name="address.state" control={register('address.state')}>
         <FormItem>
           <FormLabel>State</FormLabel>
           <FormControl>
-            <Input {...register('state')} />
+            <Input {...register('address.state')} />
           </FormControl>
-          <FormMessage>{errors.state?.message}</FormMessage>
+          <FormMessage>{errors.address?.state?.message}</FormMessage>
         </FormItem>
       </FormField>
-      <FormField name="zipCode" control={register('zipCode')}>
+      <FormField name="address.zip" control={register('address.zip')}>
         <FormItem>
           <FormLabel>Zip Code</FormLabel>
           <FormControl>
-            <Input {...register('zipCode')} />
+            <Input {...register('address.zip')} />
           </FormControl>
-          <FormMessage>{errors.zipCode?.message}</FormMessage>
+          <FormMessage>{errors.address?.zip?.message}</FormMessage>
         </FormItem>
       </FormField>
-      <FormField name="donorStatus" control={register('donorStatus')}>
+      <FormField name="status" control={register('status')}>
         <FormItem>
           <FormLabel>Status</FormLabel>
           <FormControl>
-            <select {...register('donorStatus')} className="border rounded px-3 py-2 w-full">
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="lapsed">Lapsed</option>
+            <select {...register('status')} className="border rounded px-3 py-2 w-full">
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Inactive</option>
+              <option value="LAPSED">Lapsed</option>
+              <option value="DO_NOT_CONTACT">Do Not Contact</option>
             </select>
           </FormControl>
-          <FormMessage>{errors.donorStatus?.message}</FormMessage>
+          <FormMessage>{errors.status?.message}</FormMessage>
         </FormItem>
       </FormField>
       <FormField name="retentionRisk" control={register('retentionRisk')}>
@@ -147,34 +148,13 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
           <FormLabel>Retention Risk</FormLabel>
           <FormControl>
             <select {...register('retentionRisk')} className="border rounded px-3 py-2 w-full">
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
+              <option value="LOW">Low</option>
+              <option value="MEDIUM">Medium</option>
+              <option value="HIGH">High</option>
+              <option value="CRITICAL">Critical</option>
             </select>
           </FormControl>
           <FormMessage>{errors.retentionRisk?.message}</FormMessage>
-        </FormItem>
-      </FormField>
-      <FormField name="preferredContactMethod" control={register('preferredContactMethod')}>
-        <FormItem>
-          <FormLabel>Preferred Contact Method</FormLabel>
-          <FormControl>
-            <select {...register('preferredContactMethod')} className="border rounded px-3 py-2 w-full">
-              <option value="email">Email</option>
-              <option value="phone">Phone</option>
-              <option value="mail">Mail</option>
-            </select>
-          </FormControl>
-          <FormMessage>{errors.preferredContactMethod?.message}</FormMessage>
-        </FormItem>
-      </FormField>
-      <FormField name="tags" control={register('tags')}>
-        <FormItem>
-          <FormLabel>Tags</FormLabel>
-          <FormControl>
-            <Input {...register('tags')} placeholder="Comma-separated tags" />
-          </FormControl>
-          <FormMessage>{errors.tags?.message}</FormMessage>
         </FormItem>
       </FormField>
       <FormField name="notes" control={register('notes')}>

@@ -78,15 +78,24 @@ export async function POST(request) {
     if (!parseResult.success) {
       return NextResponse.json({ error: parseResult.error.errors.map(e => e.message).join(', ') }, { status: 400 })
     }
-    // Use only Zod-validated data
+    // Use only Zod-validated data and map to Prisma fields
     const validData = parseResult.data
-    // Create donor in database, ensure defaults for status and retentionRisk
+    const { firstName, lastName, email, phone, address, status, retentionRisk } = validData
+
+    // Create donor in database, ensure defaults and flatten address
     const { prisma } = await import('@/lib/db')
     const donor = await prisma.donor.create({
       data: {
-        status: validData.status ?? 'ACTIVE',
-        retentionRisk: validData.retentionRisk ?? 'LOW',
-        ...validData,
+        firstName,
+        lastName,
+        email: email ?? null,
+        phone: phone ?? null,
+        address: address?.street ?? null,
+        city: address?.city ?? null,
+        state: address?.state ?? null,
+        zipCode: address?.zip ?? null,
+        status: status ?? 'ACTIVE',
+        retentionRisk: retentionRisk ?? 'LOW',
         organizationId: session.user.organizationId
       }
     })
