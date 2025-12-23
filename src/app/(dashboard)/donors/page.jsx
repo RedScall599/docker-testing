@@ -86,7 +86,9 @@ export default function DonorsPage() {
                 donors.map(donor => (
                   <tr key={donor.id}>
                     <td className="border px-2 py-1 font-medium">
-                      <Link href={`/donors/${donor.id}`}>{donor.name}</Link>
+                      <Link href={`/donors/${donor.id}`}>
+                        {[donor.firstName, donor.lastName].filter(Boolean).join(' ') || 'Unknown'}
+                      </Link>
                     </td>
                     <td className="border px-2 py-1">{donor.email}</td>
                     <td className="border px-2 py-1">{donor.status}</td>

@@ -1,6 +1,7 @@
 // Donations API - List and Create
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/session'
+import { createDonationSchema } from '@/lib/validation/donation-schema'
 
 export async function GET(request) {
   try {
@@ -59,30 +60,67 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    // TODO: Create donation and update donor metrics
-    const data = await request.json()
-    // Optionally: validate data here (e.g., with Zod)
-    const { prisma } = await import('@/lib/db')
-    const donation = await prisma.donation.create({
-      data: {
-        ...data,
-        organizationId: session.user.organizationId
-      }
-    })
-    // Update donor metrics (totalAmount, totalGifts, lastGiftDate)
-    if (donation.donorId) {
-      await prisma.donor.update({
-        where: { id: donation.donorId, organizationId: session.user.organizationId },
-        data: {
-          totalAmount: { increment: donation.amount },
-          totalGifts: { increment: 1 },
-          lastGiftDate: donation.date
-        }
-      })
+    // Validate request body against schema
+    const body = await request.json()
+    const parsed = createDonationSchema.safeParse(body)
+    if (!parsed.success) {
+      const details = parsed.error.flatten()
+      return NextResponse.json({ error: 'Validation error', details }, { status: 400 })
     }
 
-    // TODO: Return created donation
-    return NextResponse.json({ donation })
+    const input = parsed.data
+    const { prisma } = await import('@/lib/db')
+
+    // Enforce donor belongs to user's organization
+    const donor = await prisma.donor.findFirst({
+      where: { id: input.donorId, organizationId: session.user.organizationId }
+    })
+    if (!donor) {
+      return NextResponse.json({ error: 'Invalid donor for organization' }, { status: 400 })
+    }
+
+    // If campaignId provided, ensure campaign belongs to org
+    let campaignId = input.campaignId ?? null
+    if (campaignId) {
+      const campaign = await prisma.campaign.findFirst({
+        where: { id: campaignId, organizationId: session.user.organizationId },
+        select: { id: true }
+      })
+      if (!campaign) {
+        return NextResponse.json({ error: 'Invalid campaign for organization' }, { status: 400 })
+      }
+    }
+
+    // Create donation with allowed fields only
+    const donationCreateData = {
+      donorId: donor.id,
+      campaignId,
+      amount: input.amount,
+      date: input.date,
+      type: input.type,
+      method: input.method ?? null,
+      notes: input.notes ?? null
+    }
+
+    const created = await prisma.donation.create({ data: donationCreateData })
+
+    // Update donor metrics (totalAmount, totalGifts, lastGiftDate, firstGiftDate if first gift)
+    const donorMetricsUpdate = {
+      totalAmount: { increment: created.amount },
+      totalGifts: { increment: 1 },
+      lastGiftDate: created.date
+    }
+    if (!donor.firstGiftDate && donor.totalGifts === 0) {
+      donorMetricsUpdate.firstGiftDate = created.date
+    }
+    await prisma.donor.update({ where: { id: donor.id }, data: donorMetricsUpdate })
+
+    // Return created donation with relations
+    const donation = await prisma.donation.findUnique({
+      where: { id: created.id },
+      include: { donor: true, campaign: true }
+    })
+    return NextResponse.json({ donation }, { status: 201 })
   } catch (error) {
     // TODO: Handle errors
     return NextResponse.json({ error: 'Internal server error.' }, { status: 500 })
