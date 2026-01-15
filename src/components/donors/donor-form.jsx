@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { createDonorSchema } from '@/lib/validation/donor-schema'
+import AIFormHelper from '@/components/AIFormHelper'
 
 export function DonorForm({ donor, onSubmit, onCancel }) {
   // TODO: Import and use donor validation schema
@@ -22,6 +23,8 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
     handleSubmit: rhfHandleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    setValue,
+    watch,
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: donor || {
@@ -41,6 +44,8 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
     },
   });
 
+  const formValues = watch()
+
   // TODO: Implement form submission handler
   const handleSubmit = async (data) => {
     // TODO: Call onSubmit prop with form data
@@ -59,7 +64,10 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
       {/* TODO: Implement donor form with fields: */}
       <FormField name="firstName" control={register('firstName')}>
         <FormItem>
-          <FormLabel>First Name</FormLabel>
+          <div className="flex items-center gap-1">
+            <FormLabel>First Name</FormLabel>
+            <AIFormHelper field="firstName" context={formValues} onSuggest={(val) => setValue('firstName', val)} />
+          </div>
           <FormControl>
             <Input {...register('firstName')} />
           </FormControl>
@@ -68,7 +76,10 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
       </FormField>
       <FormField name="lastName" control={register('lastName')}>
         <FormItem>
-          <FormLabel>Last Name</FormLabel>
+          <div className="flex items-center gap-1">
+            <FormLabel>Last Name</FormLabel>
+            <AIFormHelper field="lastName" context={formValues} onSuggest={(val) => setValue('lastName', val)} />
+          </div>
           <FormControl>
             <Input {...register('lastName')} />
           </FormControl>
@@ -77,7 +88,10 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
       </FormField>
       <FormField name="email" control={register('email')}>
         <FormItem>
-          <FormLabel>Email</FormLabel>
+          <div className="flex items-center gap-1">
+            <FormLabel>Email</FormLabel>
+            <AIFormHelper field="email" context={formValues} onSuggest={(val) => setValue('email', val)} />
+          </div>
           <FormControl>
             <Input type="email" {...register('email')} />
           </FormControl>
@@ -86,7 +100,10 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
       </FormField>
       <FormField name="phone" control={register('phone')}>
         <FormItem>
-          <FormLabel>Phone</FormLabel>
+          <div className="flex items-center gap-1">
+            <FormLabel>Phone</FormLabel>
+            <AIFormHelper field="phone" context={formValues} onSuggest={(val) => setValue('phone', val)} />
+          </div>
           <FormControl>
             <Input {...register('phone')} />
           </FormControl>
@@ -95,7 +112,10 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
       </FormField>
       <FormField name="address.street" control={register('address.street')}>
         <FormItem>
-          <FormLabel>Street Address</FormLabel>
+          <div className="flex items-center gap-1">
+            <FormLabel>Street Address</FormLabel>
+            <AIFormHelper field="address" context={formValues} onSuggest={(val) => setValue('address.street', val)} />
+          </div>
           <FormControl>
             <Input {...register('address.street')} />
           </FormControl>
@@ -104,7 +124,10 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
       </FormField>
       <FormField name="address.city" control={register('address.city')}>
         <FormItem>
-          <FormLabel>City</FormLabel>
+          <div className="flex items-center gap-1">
+            <FormLabel>City</FormLabel>
+            <AIFormHelper field="city" context={formValues} onSuggest={(val) => setValue('address.city', val)} />
+          </div>
           <FormControl>
             <Input {...register('address.city')} />
           </FormControl>
@@ -113,7 +136,10 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
       </FormField>
       <FormField name="address.state" control={register('address.state')}>
         <FormItem>
-          <FormLabel>State</FormLabel>
+          <div className="flex items-center gap-1">
+            <FormLabel>State</FormLabel>
+            <AIFormHelper field="state" context={formValues} onSuggest={(val) => setValue('address.state', val)} />
+          </div>
           <FormControl>
             <Input {...register('address.state')} />
           </FormControl>
@@ -122,7 +148,10 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
       </FormField>
       <FormField name="address.zip" control={register('address.zip')}>
         <FormItem>
-          <FormLabel>Zip Code</FormLabel>
+          <div className="flex items-center gap-1">
+            <FormLabel>Zip Code</FormLabel>
+            <AIFormHelper field="zipCode" context={formValues} onSuggest={(val) => setValue('address.zip', val)} />
+          </div>
           <FormControl>
             <Input {...register('address.zip')} />
           </FormControl>
@@ -131,7 +160,10 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
       </FormField>
       <FormField name="status" control={register('status')}>
         <FormItem>
-          <FormLabel>Status</FormLabel>
+          <div className="flex items-center gap-1">
+            <FormLabel>Status</FormLabel>
+            <AIFormHelper field="donorStatus" context={formValues} onSuggest={(val) => setValue('status', val)} />
+          </div>
           <FormControl>
             <select {...register('status')} className="border rounded px-3 py-2 w-full">
               <option value="ACTIVE">Active</option>
@@ -145,7 +177,10 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
       </FormField>
       <FormField name="retentionRisk" control={register('retentionRisk')}>
         <FormItem>
-          <FormLabel>Retention Risk</FormLabel>
+          <div className="flex items-center gap-1">
+            <FormLabel>Retention Risk</FormLabel>
+            <AIFormHelper field="retentionRisk" context={formValues} onSuggest={(val) => setValue('retentionRisk', val)} />
+          </div>
           <FormControl>
             <select {...register('retentionRisk')} className="border rounded px-3 py-2 w-full">
               <option value="LOW">Low</option>

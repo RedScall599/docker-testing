@@ -32,30 +32,13 @@ export default async function DashboardLayout({ children }) {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* TODO: Implement navigation header */}
-      <header className="bg-white shadow">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-          <nav className="flex gap-6">
-            {navigation.map((item) => (
-              <Link key={item.name} href={item.href} className="flex items-center gap-2 text-gray-700 hover:text-blue-600">
-                <item.icon className="h-5 w-5" />
-                <span>{item.name}</span>
-              </Link>
-            ))}
-          </nav>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">{user?.email}</span>
-            <form action="/api/auth/logout" method="POST">
-              <button type="submit" className="bg-red-500 text-white px-3 py-1 rounded">Logout</button>
-            </form>
+    <div className="min-h-screen" style={{ background: 'hsl(var(--background))' }}>
+      {/* Main Content */}
+      <main>
+        <div className="py-12">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            {children}
           </div>
-        </div>
-      </header>
-      {/* TODO: Implement main content area */}
-      <main className="py-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {children}
         </div>
       </main>
     </div>

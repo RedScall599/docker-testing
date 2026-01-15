@@ -186,3 +186,254 @@ npx playwright install          # Install browsers
 - E2E tests: Available but may need updates for new auth pattern
 
 Refer to `resource-docs/CLAUDE.md` for detailed architecture and `PROJECT-STATUS.md` for implementation progress.
+You are assisting in building DonorConnect, a nonprofit donor + donation management platform.
+
+🎯 Project Goal
+
+Help build a real, functional, documented MVP that proves:
+
+Nonprofit staff can view & manage donors
+
+Nonprofit staff can record & view donations
+
+System supports Role-Based Access (Admin) OR has clearly defined admin-only features
+
+Includes at least one meaningful AI integration
+
+Uses real database-backed data, NOT placeholders
+
+Is fully deployed on Vercel and publicly accessible
+
+Meets rubric standards: CCC.1.1, CCC.1.2, CCC.1.3, TS.6.2, TS.6.3
+
+🧰 Tech Stack
+
+Copilot should always build using:
+
+Frontend: Next.js (JSX only)
+
+Backend: Node.js + Next.js API routes
+
+Database: Neon Postgres + Prisma
+
+AI: API-based AI integration
+
+Hosting: Vercel
+
+Version Control: GitHub
+
+No TypeScript, no frameworks outside allowed stack.
+
+📂 Required Structure
+/app
+  /home
+  /about
+  /why-donorconnect
+  /dashboard
+  /donors
+  /donations
+  /ai-policy
+  /evidence
+  /reflection
+/api
+  /donors
+  /donations
+/prisma
+  schema.prisma
+/lib
+  db.js
+/auth
+  (role-based access logic)
+
+✅ Functional Requirements
+✔️ Donor Management
+
+Staff can view donors
+
+Staff can add donors
+
+Staff can edit donors
+
+Staff can delete donors
+
+Data must persist in Neon database
+
+Must confirm success upon save
+
+✔️ Donation Management
+
+Staff can view donations
+
+Staff can record new donations
+
+Must link donations to donors
+
+Display required fields:
+
+Donor Name
+
+Email
+
+Total Gifts
+
+Total Amount
+
+Risk Level
+
+Actions (edit / delete)
+
+Data must persist
+
+Show confirmation
+
+✔️ Dashboard
+
+Must display REAL data:
+
+Total Donors
+
+Total Donations
+
+Summaries pulled from database
+
+🔐 Role-Based Access / Admin
+
+Copilot should implement either:
+
+Admin role system
+OR
+
+Pages clearly marked as Admin-only
+
+Admin functionality may include:
+
+Managing system settings
+
+Approving high-risk donors
+
+Managing AI features
+
+Advanced analytics
+
+Security should be reasonable and clearly structured.
+
+🤖 AI Integration Requirements
+
+Must include at least ONE meaningful AI feature such as:
+
+Donation risk scoring
+
+Donor engagement recommendations
+
+Donor summary intelligence
+
+Suggested messaging for donors
+
+Pattern detection in donations
+
+Smart insights for nonprofits
+
+Must also include:
+
+AI Policy page
+
+Explanation of responsible AI usage
+
+Explanation of prompt design
+
+Model clearly stated
+
+AI must be used ethically, safely, and responsibly.
+
+🌍 Deployment Requirement
+
+The application MUST:
+
+Deploy on Vercel
+
+Be publicly accessible
+
+Use live database
+
+Not rely on placeholder data
+
+📜 Documentation Requirements
+README MUST include:
+
+Overview
+
+Features
+
+Tech stack
+
+AI usage
+
+How to run locally
+
+How to run in production
+
+ENV setup
+
+Deployment details
+
+Evidence Page MUST Include:
+
+CCC.1.3 Evidence
+
+TS.6.2 Evidence
+
+TS.6.3 Evidence
+
+Links to:
+
+GitHub
+
+Vercel live site
+
+Trello
+
+Wireframes
+
+Reflection Page
+
+Must include:
+
+Biggest challenges
+
+What would change if more time
+
+Real-world lessons learned
+
+How AI helped OR did not help
+
+🧪 Copilot Rules
+
+Copilot SHOULD:
+
+Use JSX only (no TS)
+
+Prefer simple, readable solutions
+
+Build production-safe code
+
+Ensure database persistence ALWAYS works
+
+Help design UI + backend + AI
+
+Assist with Prisma + Neon debugging
+
+Support role-based functionality
+
+Avoid placeholder data
+
+Help create meaningful AI logic
+
+Copilot MUST NOT:
+
+Suggest TypeScript
+
+Suggest unsupported stacks
+
+Skip persistence
+
+Add unnecessary complexity

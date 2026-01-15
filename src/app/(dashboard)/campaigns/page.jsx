@@ -1,6 +1,7 @@
 "use client"
 import React from 'react'
 import { Button } from '@/components/ui/button'
+import AIFormHelper from '@/components/AIFormHelper'
 
 // Campaigns list page with admin-only add button
 
@@ -68,16 +69,19 @@ export default function CampaignsPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Campaigns</h1>
         {userRole === 'ADMIN' && (
-          <Button onClick={() => setAdding(a => !a)}>
+          <button className="btn-primary" onClick={() => setAdding(a => !a)}>
             {adding ? 'Cancel' : 'Add Campaign'}
-          </Button>
+          </button>
         )}
       </div>
 
       {adding && userRole === 'ADMIN' && (
         <div className="border rounded p-4 space-y-3">
           <div>
-            <label className="block text-sm font-medium">Name</label>
+            <label className="flex items-center gap-1 text-sm font-medium">
+              Name
+              <AIFormHelper field="campaignName" onSuggest={() => {}} />
+            </label>
             <input
               className="border rounded px-3 py-2 w-full"
               type="text"
@@ -87,7 +91,10 @@ export default function CampaignsPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium">Description</label>
+            <label className="flex items-center gap-1 text-sm font-medium">
+              Description
+              <AIFormHelper field="campaignDescription" onSuggest={() => {}} />
+            </label>
             <textarea
               className="border rounded px-3 py-2 w-full"
               rows={3}

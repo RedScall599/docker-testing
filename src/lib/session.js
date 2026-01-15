@@ -41,7 +41,8 @@ export async function getSession(sessionToken) {
   // Query database for session and user
   let session
   try {
-    session = await prisma.session.findUnique({
+    // Use findFirst to avoid strict findUnique invocation validation
+    session = await prisma.session.findFirst({
       where: { token: sessionToken },
       include: { user: { include: { organization: true } } }
     })
@@ -53,7 +54,8 @@ export async function getSession(sessionToken) {
   // Check if session is expired
   if (session.expiresAt < new Date()) {
     try {
-      await prisma.session.delete({ where: { token: sessionToken } })
+      // Use deleteMany to tolerate different where shapes and avoid errors
+      await prisma.session.deleteMany({ where: { token: sessionToken } })
     } catch (err) {
       console.error('Failed to delete expired session:', err)
     }

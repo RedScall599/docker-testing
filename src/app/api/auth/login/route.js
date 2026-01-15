@@ -8,8 +8,8 @@ export async function POST(request) {
     // Parse request body (email, password)
     let { email, password } = await request.json()
 
-    // Trim whitespace from email
-    if (typeof email === 'string') email = email.trim()
+    // Normalize email (trim + lowercase)
+    if (typeof email === 'string') email = email.trim().toLowerCase()
 
     // Unified error message for missing fields
     if (!email || !password) {
@@ -26,6 +26,7 @@ export async function POST(request) {
     try {
       user = await login(email, password)
     } catch (err) {
+      console.error('Login error:', err)
       return NextResponse.json({ error: 'Login failed.' }, { status: 500 })
     }
     if (!user) {

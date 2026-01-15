@@ -1,5 +1,6 @@
 "use client"
 import React from 'react'
+import AIFormHelper from '@/components/AIFormHelper'
 // Tasks page  
 export default function TasksPage() {
   // Task and reminders state
@@ -43,7 +44,10 @@ export default function TasksPage() {
       <h1 className="text-3xl font-bold">Tasks & Reminders</h1>
       <form className="flex gap-2 items-end" onSubmit={addTask}>
         <div>
-          <label className="block text-sm font-medium">Task</label>
+          <div className="flex items-center">
+            <label className="block text-sm font-medium">Task</label>
+            <AIFormHelper field="taskText" context={{}} onSuggest={(val) => setNewTask(val)} />
+          </div>
           <input
             className="border rounded px-3 py-2"
             type="text"
@@ -53,7 +57,10 @@ export default function TasksPage() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium">Reminder Date</label>
+          <div className="flex items-center">
+            <label className="block text-sm font-medium">Reminder Date</label>
+            <AIFormHelper field="reminder" context={{}} onSuggest={(val) => setNewReminder(val)} />
+          </div>
           <input
             className="border rounded px-3 py-2"
             type="date"
@@ -61,7 +68,7 @@ export default function TasksPage() {
             onChange={e => setNewReminder(e.target.value)}
           />
         </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded" type="submit">
+        <button className="btn-primary" type="submit">
           Add Task
         </button>
       </form>
@@ -80,7 +87,8 @@ export default function TasksPage() {
               <span className="ml-4 text-xs text-gray-500">Remind: {task.reminder}</span>
             )}
             <button
-              className="ml-auto text-red-600 hover:underline"
+              className="ml-auto font-medium transition-colors hover:opacity-80"
+              style={{ color: 'hsl(var(--destructive))' }}
               onClick={() => removeTask(task.id)}
             >
               Delete

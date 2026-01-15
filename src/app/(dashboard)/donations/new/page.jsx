@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useDonors } from '@/hooks/use-donors'
 import { useCampaigns } from '@/hooks/use-campaigns'
+import AIFormHelper from '@/components/AIFormHelper'
 
 export default function NewDonationPage() {
   // TODO: Implement donation creation form
@@ -48,12 +49,12 @@ export default function NewDonationPage() {
         })
       })
       const data = await res.json()
-      if (!res.ok) {
+        if (!res.ok) {
         const details = data?.details?.fieldErrors
         const detailMsg = details ? Object.entries(details).map(([k, v]) => `${k}: ${v.join(', ')}`).join('; ') : ''
         setError(data.error || detailMsg || 'Failed to create donation.')
       } else {
-        router.push('/donations')
+          router.push('/donations?created=1')
       }
     } catch (err) {
       setError('Failed to create donation. Please try again.')
@@ -68,17 +69,26 @@ export default function NewDonationPage() {
       {error && <div className="mb-4 text-red-600 text-sm">{error}</div>}
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Amount */}
-        <Input
-          type="number"
-          placeholder="Amount"
-          value={amount}
-          onChange={e => setAmount(e.target.value)}
-          required
-          disabled={loading}
-        />
+        <div>
+          <div className="flex items-center gap-1 mb-1">
+            <label className="block text-sm font-medium">Amount</label>
+            <AIFormHelper field="amount" context={{}} onSuggest={() => {}} />
+          </div>
+          <Input
+            type="number"
+            placeholder="Amount"
+            value={amount}
+            onChange={e => setAmount(e.target.value)}
+            required
+            disabled={loading}
+          />
+        </div>
         {/* Donor */}
         <div>
-          <label className="block text-sm mb-1">Donor</label>
+          <div className="flex items-center gap-1">
+            <label className="block text-sm mb-1">Donor</label>
+            <AIFormHelper field="donor" context={{}} onSuggest={() => {}} />
+          </div>
           {donorsError && <div className="text-sm text-red-600">Failed to load donors</div>}
           <select
             className="border rounded px-2 py-2 w-full"
@@ -97,7 +107,10 @@ export default function NewDonationPage() {
         </div>
         {/* Campaign (optional) */}
         <div>
-          <label className="block text-sm mb-1">Campaign (optional)</label>
+          <div className="flex items-center gap-1">
+            <label className="block text-sm mb-1">Campaign (optional)</label>
+            <AIFormHelper field="campaign" context={{}} onSuggest={() => {}} />
+          </div>
           {campaignsError && <div className="text-sm text-red-600">Failed to load campaigns</div>}
           <select
             className="border rounded px-2 py-2 w-full"
@@ -112,17 +125,26 @@ export default function NewDonationPage() {
           </select>
         </div>
         {/* Date */}
-        <Input
-          type="date"
-          placeholder="Date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          required
-          disabled={loading}
-        />
+        <div>
+          <div className="flex items-center gap-1 mb-1">
+            <label className="block text-sm font-medium">Date</label>
+            <AIFormHelper field="date" context={{}} onSuggest={() => {}} />
+          </div>
+          <Input
+            type="date"
+            placeholder="Date"
+            value={date}
+            onChange={e => setDate(e.target.value)}
+            required
+            disabled={loading}
+          />
+        </div>
         {/* Type */}
         <div>
-          <label className="block text-sm mb-1">Type</label>
+          <div className="flex items-center gap-1">
+            <label className="block text-sm mb-1">Type</label>
+            <AIFormHelper field="type" context={{}} onSuggest={() => {}} />
+          </div>
           <select
             className="border rounded px-2 py-2 w-full"
             value={type}
@@ -136,21 +158,33 @@ export default function NewDonationPage() {
           </select>
         </div>
         {/* Method (optional) */}
-        <Input
-          placeholder="Method (e.g., Credit Card)"
-          value={method}
-          onChange={e => setMethod(e.target.value)}
-          disabled={loading}
-        />
+        <div>
+          <div className="flex items-center gap-1 mb-1">
+            <label className="block text-sm font-medium">Method (optional)</label>
+            <AIFormHelper field="method" context={{}} onSuggest={() => {}} />
+          </div>
+          <Input
+            placeholder="Method (e.g., Credit Card)"
+            value={method}
+            onChange={e => setMethod(e.target.value)}
+            disabled={loading}
+          />
+        </div>
         {/* Notes (optional) */}
-        <textarea
-          className="border rounded px-2 py-2 w-full"
-          rows={3}
-          placeholder="Notes (optional)"
-          value={notes}
-          onChange={e => setNotes(e.target.value)}
-          disabled={loading}
-        />
+        <div>
+          <div className="flex items-center gap-1 mb-1">
+            <label className="block text-sm font-medium">Notes (optional)</label>
+            <AIFormHelper field="notes" context={{}} onSuggest={() => {}} />
+          </div>
+          <textarea
+            className="border rounded px-2 py-2 w-full"
+            rows={3}
+            placeholder="Notes (optional)"
+            value={notes}
+            onChange={e => setNotes(e.target.value)}
+            disabled={loading}
+          />
+        </div>
         <Button type="submit" className="w-full" disabled={loading}>
           {loading ? 'Saving...' : 'Save Donation'}
         </Button>

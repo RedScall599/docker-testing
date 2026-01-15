@@ -28,10 +28,10 @@ export default function DonorsPage() {
           </p>
         </div>
         <Link href="/donors/new">
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
+          <button className="btn-primary flex items-center gap-2">
+            <Plus className="h-4 w-4" />
             Add Donor
-          </Button>
+          </button>
         </Link>
       </div>
 
@@ -96,8 +96,9 @@ export default function DonorsPage() {
                     <td className="border px-2 py-1">${donor.totalAmount ?? 'N/A'}</td>
                     <td className="border px-2 py-1">{donor.lastGiftDate ? new Date(donor.lastGiftDate).toLocaleDateString() : 'N/A'}</td>
                     <td className="border px-2 py-1">
-                      <Link href={`/donors/${donor.id}/edit`} className="text-blue-600 hover:underline mr-2">Edit</Link>
-                      <button className="text-red-600 hover:underline" onClick={() => alert('Delete not implemented')}>Delete</button>
+                      <Link href={`/donors/${donor.id}/edit`} className="font-medium transition-colors" style={{ color: 'hsl(var(--primary))' }}>Edit</Link>
+                      <span className="mx-2" style={{ color: 'hsl(var(--border))' }}>|</span>
+                      <button className="font-medium transition-colors hover:opacity-80" style={{ color: 'hsl(var(--destructive))' }} onClick={() => alert('Delete not implemented')}>Delete</button>
                     </td>
                   </tr>
                 ))

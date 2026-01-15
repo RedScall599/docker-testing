@@ -42,7 +42,7 @@ export default function LoginPage() {
       } else {
         // Show success confirmation then redirect
         setSuccess('Successful login')
-        const next = searchParams.get('next') || '/dashboard'
+        const next = searchParams.get('next') || '/home'
         setTimeout(() => router.push(next), 800)
       }
     } catch (err) {
