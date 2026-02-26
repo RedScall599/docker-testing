@@ -50,7 +50,7 @@ export default async function ReflectionPage() {
         </section>
 
         <section className="card">
-          <h2 className="text-2xl font-semibold mb-4" style={{ color: 'hsl(var(--primary))' }}>How AI Helped (and Didn't Help)</h2>
+          <h2 className="text-2xl font-semibold mb-4" style={{ color: 'hsl(var(--primary))' }}>How AI Helped (and Didn&#39;t Help)</h2>
           <div className="space-y-4" style={{ color: 'hsl(var(--foreground))' }}>
             <div>
               <h3 className="text-xl font-semibold mb-2" style={{ color: 'hsl(var(--accent))' }}>Where AI Helped:</h3>
@@ -63,7 +63,7 @@ export default async function ReflectionPage() {
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-semibold mb-2" style={{ color: 'hsl(var(--accent))' }}>Where AI Didn't Help:</h3>
+              <h3 className="text-xl font-semibold mb-2" style={{ color: 'hsl(var(--accent))' }}>Where AI Didn&#39;t Help:</h3>
               <ul className="list-disc list-inside space-y-2">
                 <li>Understanding the specific business logic and domain requirements for nonprofit donor management</li>
                 <li>Making architectural decisions about when to use server vs client components in Next.js 16</li>

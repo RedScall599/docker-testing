@@ -13,25 +13,26 @@ export default function RetentionChart({
   fill = 'rgba(37, 99, 235, 0.15)',
   seriesLabel = 'Monthly retention rate'
 }) {
-  if (!Array.isArray(data) || data.length === 0) {
-    return <div className="h-40 bg-gray-100 rounded flex items-center justify-center text-gray-400">No data</div>
-  }
-
   const width = 600
   const h = height
-  const max = Math.max(...data, 1)
-  const min = Math.min(...data, 0)
   const padX = 24
   const padY = 16
   const innerW = width - padX * 2
   const innerH = h - padY * 2
-  const stepX = innerW / (data.length - 1)
 
-  const points = useMemo(() => data.map((v, i) => {
-    const x = padX + i * stepX
-    const y = padY + (1 - normalize(v, min, max)) * innerH
-    return [x, y]
-  }), [data, innerH, min, max, padX, stepX])
+  // guard against empty data so hooks can be called unconditionally
+  const max = data && data.length ? Math.max(...data, 1) : 1
+  const min = data && data.length ? Math.min(...data, 0) : 0
+  const stepX = data && data.length > 1 ? innerW / (data.length - 1) : 0
+
+  const points = useMemo(() => {
+    if (!Array.isArray(data) || data.length === 0) return []
+    return data.map((v, i) => {
+      const x = padX + i * stepX
+      const y = padY + (1 - normalize(v, min, max)) * innerH
+      return [x, y]
+    })
+  }, [data, innerH, min, max, padX, stepX])
 
   const pathD = points.map(([x, y], i) => (i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`)).join(' ')
   const areaD = `${pathD} L ${padX + innerW} ${padY + innerH} L ${padX} ${padY + innerH} Z`
@@ -42,6 +43,7 @@ export default function RetentionChart({
   }))
 
   const xTicks = useMemo(() => {
+    if (!Array.isArray(data) || data.length === 0) return []
     const out = []
     const tickEvery = Math.ceil(data.length / 6) // ~6 ticks max
     for (let i = 0; i < data.length; i += tickEvery) out.push(i)
@@ -52,6 +54,7 @@ export default function RetentionChart({
   // Hover tooltip
   const [hover, setHover] = useState(null) // {i, x, y}
   function onMove(evt) {
+    if (!points || points.length === 0) return
     const rect = evt.currentTarget.getBoundingClientRect()
     const relX = (evt.clientX - rect.left) * (width / rect.width)
     const i = Math.max(0, Math.min(data.length - 1, Math.round((relX - padX) / stepX)))
