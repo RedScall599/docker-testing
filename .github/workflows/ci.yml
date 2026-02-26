@@ -25,9 +25,12 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
+        working-directory: .
 
       - name: Run Linter
         run: npm run lint
+        working-directory: .
 
       - name: Run Unit Tests
         run: npm test
+        working-directory: .
