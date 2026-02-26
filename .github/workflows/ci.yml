@@ -35,8 +35,8 @@ jobs:
           echo "--- package.json ---"
           cat package.json
 
-      - name: Run Linter
-        run: npx next lint .
+      - name: Run Linter (ESLint directly)
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx
 
       - name: Run Unit Tests
         run: npm test
