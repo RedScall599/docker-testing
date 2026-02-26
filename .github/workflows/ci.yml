@@ -28,7 +28,7 @@ jobs:
     
 
       - name: Run Linter
-        run: npx next lint . --no-cache
+        run: npx next lint .
         
 
       - name: Run Unit Tests
