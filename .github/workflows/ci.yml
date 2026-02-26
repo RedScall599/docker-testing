@@ -36,7 +36,7 @@ jobs:
           cat package.json
 
       - name: Run Linter (ESLint directly)
-        run: npx eslint . --ext .js,.jsx,.ts,.tsx
+        run: npx eslint -c .eslintrc.json . --ext .js,.jsx,.ts,.tsx
 
       - name: Run Unit Tests
         run: npm test
