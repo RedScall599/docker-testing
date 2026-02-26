@@ -1,7 +1,13 @@
-import 'dotenv/config'
-import { defineConfig, env } from 'prisma/config'
+// Load dotenv if available, but continue if it's not installed
+try {
+  // eslint-disable-next-line node/no-extraneous-import
+  require('dotenv/config')
+} catch (e) {
+  // dotenv not installed — that's fine in some environments
+}
 
-export default defineConfig({
+// Export a plain config object to avoid requiring 'prisma/config'
+module.exports = {
   schema: 'prisma/schema.prisma',
 
   migrations: {
@@ -10,6 +16,7 @@ export default defineConfig({
   },
 
   datasource: {
-    url: env('DATABASE_URL'),
+    // Use DATABASE_URL from environment; Prisma will accept this
+    url: process.env.DATABASE_URL,
   },
-})
+}
