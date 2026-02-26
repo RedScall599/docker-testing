@@ -25,11 +25,18 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
-    
+
+      - name: CI Diagnostics
+        run: |
+          echo "PWD: $(pwd)"
+          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
+          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+          ls -la
+          echo "--- package.json ---"
+          cat package.json
 
       - name: Run Linter
         run: npx next lint .
-        
 
       - name: Run Unit Tests
         run: npm test
