@@ -1,0 +1,12 @@
+.git
+node_modules
+.next
+.env
+.env.local
+.env.*
+pnpm-lock.yaml
+pnpm-debug.log*
+.DS_Store
+.vscode
+Dockerfile
+docker-compose.override.yml

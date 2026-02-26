@@ -119,9 +119,9 @@ export async function createDonor(data, organizationId) {
 
 ## 🚀 Quick Start
 
-### Prerequisites
+-### Prerequisites
 
-- **Node.js 18+** and **pnpm 10.18+** (recommended package manager)
+- **Node.js 18+** and **npm** (bundled with Node.js)
 - **PostgreSQL database** (local installation or cloud service like Neon)
 - **Basic knowledge** of JavaScript, React, and SQL concepts
 
@@ -131,7 +131,7 @@ export async function createDonor(data, organizationId) {
    ```bash
    git clone <repository-url>
    cd donor-connect
-   pnpm install
+   npm install
    ```
 
 2. **Configure environment:**
@@ -162,7 +162,7 @@ export async function createDonor(data, organizationId) {
 
 4. **Start development:**
    ```bash
-   pnpm dev
+   npm run dev
    ```
    
    🎉 Open [http://localhost:3000](http://localhost:3000) and start coding!
@@ -255,10 +255,10 @@ donor-connect/
 
 ```bash
 # 🚀 Development
-pnpm dev                         # Start dev server (http://localhost:3000)
-pnpm build                       # Build for production
-pnpm start                       # Start production server
-pnpm lint                        # Run ESLint
+npm run dev                      # Start dev server (http://localhost:3000)
+npm run build                    # Build for production
+npm run start                    # Start production server
+npm run lint                     # Run ESLint
 
 # 🗄️ Database Operations  
 npx prisma generate              # Generate client after schema changes
@@ -267,10 +267,10 @@ npx prisma studio                # Visual database browser (GUI)
 npx prisma db seed               # Reload test data (resets database)
 
 # 🧪 Testing
-pnpm test                        # Run unit tests with Vitest
-pnpm test:watch                  # Run tests in watch mode
-pnpm test:ui                     # Open Vitest UI interface
-pnpm test:e2e                    # Run Playwright E2E tests
+npm test                         # Run unit tests with Vitest
+npm run test:watch               # Run tests in watch mode
+npm run test:ui                  # Open Vitest UI interface
+npm run test:e2e                 # Run Playwright E2E tests
 ```
 
 ### Development Tips
@@ -292,8 +292,8 @@ npx prisma db seed               # Reload sample data
 npx prisma studio
 
 # Reset everything if stuck
-rm -rf node_modules pnpm-lock.yaml
-pnpm install
+rm -rf node_modules package-lock.json
+npm install
 npx prisma generate
 npx prisma migrate reset
 
@@ -315,13 +315,13 @@ The seed script creates realistic nonprofit data:
 
 ```bash
 # 🧪 Unit & Integration Tests (Vitest)
-pnpm test                        # Run all tests once
-pnpm test:watch                  # Watch mode for active development
-pnpm test:ui                     # Visual test runner interface
+npm test                         # Run all tests once
+npm run test:watch               # Watch mode for active development
+npm run test:ui                  # Visual test runner interface
 
 # 🎭 End-to-End Tests (Playwright)  
 npx playwright install          # Install browsers (one-time setup)
-pnpm test:e2e                    # Run full user workflow tests
+npm run test:e2e                 # Run full user workflow tests
 npx playwright test --ui         # Interactive test runner
 ```
 
@@ -550,7 +550,7 @@ Major Gifts Initiative  → $35,200 raised (active)
 - **ESLint** - Code quality and consistency
 
 ### **Development Tools**
-- **pnpm 10.18.1** - Fast, space-efficient package manager  
+- **npm** - Official Node.js package manager
 - **Prisma Studio** - Visual database browser
 - **Hot reloading** - Instant feedback during development
 
