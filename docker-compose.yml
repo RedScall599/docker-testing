@@ -1,25 +1,70 @@
 version: "3.8"
 
+# Compose file for local development or simple deployments. This file defines
+# two services:
+# - `app`: the Next.js + Prisma application built from the local Dockerfile
+# - `db`: a PostgreSQL database used by the app
+#
+# Notes and recommendations:
+# - Use an env file (here `.env.production`) to keep secrets and DB URLs out of
+#   version control. For production, prefer an external secret store or
+#   environment config from your orchestrator.
+# - The `db_data` volume persists Postgres data so containers can be recreated
+#   without losing the database state. Back up this data for production.
+# - `depends_on` controls startup order, but it does not wait for the DB to be
+#   ready to accept connections. Add an application-side retry or a healthcheck
+#   + wait-for script if startup ordering matters.
+
 services:
   app:
+    # Build the image from the local Dockerfile (multi-stage build).
     build: .
+
+    # Map host port 3000 to container port 3000 so the app is reachable at
+    # http://localhost:3000 when running compose locally.
     ports:
       - "3000:3000"
+
+    # Load environment variables from a file. This should include DATABASE_URL
+    # and any other runtime secrets. Keep `.env.production` out of Git.
     env_file:
       - .env.production
+
+    # Make Compose start the DB container before the app container. This only
+    # controls start order, not DB readiness.
     depends_on:
       - db
+
+    # Restart policy ensures the container is restarted on failure. For local
+    # dev this is convenient; in production use your orchestrator's restart
+    # and scaling features (Kubernetes, ECS, etc.).
     restart: always
 
   db:
+    # Use an official Postgres image. Pin the major version to avoid surprises
+    # during upgrades; consider using a specific patch version for stricter
+    # reproducibility.
     image: postgres:13
+
+    # Set basic Postgres credentials and database name via environment vars.
+    # For production, inject these via a secure secrets mechanism instead of
+    # hard-coding in compose files.
     environment:
       POSTGRES_USER: appuser
       POSTGRES_PASSWORD: password
       POSTGRES_DB: appdb
+
+    # Persist database files to a named Docker volume so data survives container
+    # recreation. On production hosts, you may want to mount a host path or use
+    # a managed database service instead of a containerized DB.
     volumes:
       - db_data:/var/lib/postgresql/data
+
+    # Restart if the DB container fails.
     restart: always
 
+# Named volumes declared here are managed by Docker and stored on the host.
 volumes:
+  # Persist Postgres data between container churn. Consider adding a backup
+  # strategy and volume labels/constraints in production.
   db_data:
