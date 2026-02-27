@@ -8,12 +8,21 @@ const coreWebVitals = nextConfig && nextConfig.configs && nextConfig.configs['co
 // Ensure the `node` plugin is present on the resolved config so rules like
 // `node/no-extraneous-import` are recognized when ESLint runs.
 function ensureNodePlugin(item) {
+  function addNode(cfg) {
+    if (!cfg || typeof cfg !== 'object') return
+    // Normalize plugins to an array in a safe way. `cfg.plugins` may be
+    // undefined, a string, an array, or another non-iterable value from the
+    // resolved Next config. Coerce to array then dedupe.
+    const existing = Array.isArray(cfg.plugins)
+      ? cfg.plugins
+      : (cfg.plugins == null ? [] : [cfg.plugins])
+    cfg.plugins = Array.from(new Set([...existing, 'node']))
+  }
+
   if (Array.isArray(item)) {
-    item.forEach(cfg => {
-      if (cfg && typeof cfg === 'object') cfg.plugins = Array.from(new Set([...(cfg.plugins || []), 'node']))
-    })
-  } else if (item && typeof item === 'object') {
-    item.plugins = Array.from(new Set([...(item.plugins || []), 'node']))
+    item.forEach(addNode)
+  } else {
+    addNode(item)
   }
 }
 
