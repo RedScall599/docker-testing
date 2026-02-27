@@ -3,7 +3,7 @@ try {
   // eslint-disable-next-line node/no-extraneous-import
   require('dotenv/config')
 } catch (e) {
-  // dotenv not installed — that's fine in some environments
+  // dotenv not installed  that's fine in some environments
 }
 
 // Export a plain config object to avoid requiring 'prisma/config'
