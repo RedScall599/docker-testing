@@ -1,9 +1,8 @@
 // Load dotenv if available, but continue if it's not installed
 try {
-  // eslint-disable-next-line node/no-extraneous-import
   require('dotenv/config')
 } catch (e) {
-  // dotenv not installed — that's fine in some environments
+  // dotenv not installed  that's fine in some environments
 }
 
 // Export a plain config object to avoid requiring 'prisma/config'

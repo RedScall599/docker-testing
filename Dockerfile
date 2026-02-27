@@ -50,7 +50,7 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 # Ensure Node runs in production mode by default. Some libraries optimize
-# behavior based on NODE_ENV (e.g., disabling verbose logs or dev-only checks).
+# behavior based on NODE_ENV (, disabling verbose logs or dev-only checks).
 ENV NODE_ENV=production
 
 # Copy only the package manifests and install production dependencies.
