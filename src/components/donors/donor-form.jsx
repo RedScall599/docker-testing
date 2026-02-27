@@ -44,6 +44,11 @@ export function DonorForm({ donor, onSubmit, onCancel }) {
     },
   });
 
+  // `react-hook-form`'s `watch()` is considered an incompatible API for
+  // certain React memoization rules because it returns functions/refs that
+  // cannot be safely memoized. Silence the linter here while keeping the
+  // live form values available for AI suggestions and other helpers.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const formValues = watch()
 
   // TODO: Implement form submission handler

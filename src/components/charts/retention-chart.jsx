@@ -49,7 +49,12 @@ export default function RetentionChart({
     for (let i = 0; i < data.length; i += tickEvery) out.push(i)
     if (out[out.length - 1] !== data.length - 1) out.push(data.length - 1)
     return out
-  }, [data.length])
+  }, [data])
+  // Include `data` itself as a dependency so ESLint/react-hooks can properly
+  // detect changes to the array contents. Using `data.length` alone may miss
+  // scenarios where array contents change but length does not.
+  // (dependency array updated below)
+
 
   // Hover tooltip
   const [hover, setHover] = useState(null) // {i, x, y}
